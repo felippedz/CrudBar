@@ -1,0 +1,116 @@
+CREATE DATABASE Bar
+Use Bar
+CREATE TABLE Documento (
+    ID TINYINT PRIMARY KEY IDENTITY,
+    Tipo_Documento NCHAR(15),
+    Estado BIT
+);
+
+CREATE TABLE Sede (
+    ID TINYINT PRIMARY KEY IDENTITY,
+    Nombre_Sede NCHAR(30),
+    Direccion NCHAR(60),
+    Telefono NCHAR(10),
+    Correo NCHAR(60),
+    Estado BIT
+);
+
+CREATE TABLE Roles (
+    ID TINYINT PRIMARY KEY IDENTITY,
+    Nombre_Rol NCHAR(10)
+);
+
+CREATE TABLE Mesas (
+    ID TINYINT PRIMARY KEY IDENTITY,
+    Nombre_Mesa NCHAR(10),
+    ID_Sede TINYINT FOREIGN KEY REFERENCES Sede(ID),
+    Cantidad_Asientos TINYINT,
+    Estado BIT
+);
+
+
+CREATE TABLE Categoria_Producto (
+    ID TINYINT PRIMARY KEY IDENTITY,
+    Nombre_Categoria NCHAR(20),
+	ImagenCategoria image,
+    Estado BIT
+);
+
+CREATE TABLE Envase_Producto (
+    ID TINYINT PRIMARY KEY IDENTITY,
+    Nombre_Envase NCHAR(10),
+    Estado BIT
+);
+
+CREATE TABLE Marca_Producto (
+    ID TINYINT PRIMARY KEY IDENTITY,
+    Nombre_Marca NCHAR(60),
+    Estado BIT
+);
+
+CREATE TABLE Usuario (
+    ID TINYINT PRIMARY KEY IDENTITY,
+    Nombre NCHAR(20),
+    Apellido NCHAR(20),
+    Documento NCHAR(20),
+    Telefono NCHAR(10),
+--Este sera el usuario para acceder a la aplicacion
+    Correo NCHAR(60),
+    Estado BIT,
+    Fecha_Creacion DATE,
+--Se extendió a ese numero por la encriptación de sha256que genera un valor de 64 caracteres
+    Password NCHAR(255),
+    ID_Documento TINYINT FOREIGN KEY REFERENCES Documento(ID),
+    ID_Sede TINYINT FOREIGN KEY REFERENCES Sede(ID),
+    ID_Rol TINYINT FOREIGN KEY REFERENCES Roles(Id)
+);
+
+CREATE TABLE Producto (
+    ID TINYINT PRIMARY KEY IDENTITY,
+    Nombre NCHAR(30),
+    Descripcion NCHAR(60),
+    Precio money,
+    PrecioVenta money,
+    Disponibilidad BIT,
+    Estado BIT,
+	ImagenProducto image,
+    ID_Categoria TINYINT FOREIGN KEY REFERENCES Categoria_Producto(ID),
+    ID_Envase TINYINT FOREIGN KEY REFERENCES Envase_Producto(ID),
+    ID_Marca TINYINT FOREIGN KEY REFERENCES Marca_Producto(ID)
+);
+
+CREATE TABLE Inventario (
+   ID TINYINT PRIMARY KEY IDENTITY,
+   ID_PRODUCTO TINYINT FOREIGN KEY REFERENCES Producto(ID),
+   Cantidad_Disponible INT,
+   Cantidad_Minima INT,
+   Fecha_Ultima_Actualizacion DATE,
+Precio money
+);
+CREATE TABLE  MetodoPago(
+ID TINYINT PRIMARY KEY IDENTITY,
+metodo nchar(30)
+);
+CREATE TABLE Pedido (
+    ID TINYINT PRIMARY KEY IDENTITY,
+    Fecha_Pedido Date,
+    Estado_Pedido nchar(50),
+    Total money,
+    --Metodo_pago -> Hacer una lista,
+    Observaciones NCHAR(100),
+    ID_MESA TINYINT FOREIGN KEY REFERENCES Mesas(ID),
+	ID_MetodoPago TINYINT FOREIGN KEY REFERENCES MetodoPago(ID),
+);
+
+CREATE TABLE Detalle_Pedido (
+    ID TINYINT PRIMARY KEY IDENTITY,
+    Estado bit,
+    SedeVenta TINYINT,
+    Cantidad TINYINT,
+    Precio_Unitario money,
+    Subtotal money,
+	Total money,
+    ID_PEDIDO TINYINT FOREIGN KEY REFERENCES Pedido(ID),
+    ID_PRODUCTO TINYINT FOREIGN KEY REFERENCES Producto(ID),
+);
+

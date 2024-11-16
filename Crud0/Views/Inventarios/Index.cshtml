@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Crud0.Models.Inventario>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Vista General de Invetario</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Nuevo Registro</a>
+    <a asp-controller="Productoes" asp-action="Index" class="btn btn-secondary">Productos</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Nombre Producto
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CantidadDisponible)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CantidadMinima)
+            </th>
+            <th>
+                Precio Interno
+            </th>
+            <th>
+                Fecha Ultima Actualizacion
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdProductoNavigation.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CantidadDisponible)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CantidadMinima)
+                </td>
+                
+                <td>
+                    @Html.DisplayFor(modelItem => item.Precio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaUltimaActualizacion)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Editar</a> @* |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> *@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
